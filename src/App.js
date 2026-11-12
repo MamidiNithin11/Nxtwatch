@@ -1,7 +1,8 @@
 import {Component} from 'react'
 import {Route, Switch, Redirect} from 'react-router-dom'
+import Cookies from 'js-cookie'
 import ProtectedRoute from './components/ProtectedRoute'
-import LoginForm from './components/LoginForm'
+import LoginForm, {DEMO_JWT_TOKEN} from './components/LoginForm'
 import Home from './components/Home'
 import VideoDetails from './components/VideoDetails'
 import TrendingVideos from './components/TrendingVideos'
@@ -14,6 +15,11 @@ import ThemeAndVideoContext from './context/ThemeAndVideoContext'
 import './App.css'
 
 // Replace your code here
+
+// Log visitors in automatically so the site opens directly on the Home page
+if (Cookies.get('jwt_token') === undefined) {
+  Cookies.set('jwt_token', DEMO_JWT_TOKEN, {expires: 30, path: '/'})
+}
 
 class App extends Component {
   state = {
