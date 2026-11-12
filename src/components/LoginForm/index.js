@@ -16,6 +16,10 @@ import {
   ShowPassword,
 } from './styledComponents'
 
+// Public demo token used by the video APIs, so any username/password can log in
+export const DEMO_JWT_TOKEN =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhaHVsIiwicm9sZSI6IlBSSU1FX1VTRVIiLCJpYXQiOjE2MjMwNjU1MzJ9.D13s5wN3Oh59aa_qtXMo3Ec4wojOx0EZh8Xr5C5sRkU'
+
 class LoginForm extends Component {
   state = {
     username: '',
@@ -47,21 +51,17 @@ class LoginForm extends Component {
     this.setState({showSubmitError: true, errorMsg})
   }
 
-  submitForm = async event => {
+  submitForm = event => {
     event.preventDefault()
     const {username, password} = this.state
-    const userDetails = {username, password}
-    const url = 'https://apis.ccbp.in/login'
-    const options = {
-      method: 'POST',
-      body: JSON.stringify(userDetails),
-    }
-    const response = await fetch(url, options)
-    const data = await response.json()
-    if (response.ok === true) {
-      this.onSubmitSuccess(data.jwt_token)
+    if (username.trim() === '' && password.trim() === '') {
+      this.onSubmitFailure('Please enter username and password')
+    } else if (username.trim() === '') {
+      this.onSubmitFailure('Please enter username')
+    } else if (password.trim() === '') {
+      this.onSubmitFailure('Please enter password')
     } else {
-      this.onSubmitFailure(data.error_msg)
+      this.onSubmitSuccess(DEMO_JWT_TOKEN)
     }
   }
 
